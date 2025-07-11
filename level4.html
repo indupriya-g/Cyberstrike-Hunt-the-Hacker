@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cyber Strike: Packet Analysis</title>
+  <style>
+    body {
+      background: linear-gradient(to right, #000000, #0f0f0f 40%, #050505);
+      font-family: 'Courier New', monospace;
+      color: #00ffee;
+      position: relative;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+      flex-direction: column;
+      background-image: url('assets/bg4.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+    }
+.background-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(10, 10, 10, 0.5); /* Dull layer */
+  z-index: 0;
+}
+
+   
+
+    h1.main-heading {
+      text-align: center;
+  color: #ff0033; /* Red color */
+  font-size: 2.5rem;
+  text-shadow:
+    0 0 10px #ff0033cc,
+    0 0 20px #ff0033aa,
+    0 0 30px #ff3355aa; /* Enhanced glow layers */
+  z-index: 2;
+  margin-top: 1rem;
+  position: relative;
+  animation: pulse-glow 2s infinite;
+      
+    }
+    @keyframes pulse-glow {
+  0%, 100% {
+    text-shadow:
+      0 0 10px #ff0033cc,
+      0 0 20px #ff0033aa,
+      0 0 30px #ff3355aa;
+  }
+  50% {
+    text-shadow:
+      0 0 20px #ff3355cc,
+      0 0 40px #ff0033bb,
+      0 0 60px #ff0033cc;
+  }
+}
+
+/* Add a futuristic icon or symbol before the heading */
+h1.main-heading::before {
+  content: "⚡"; /* You can change this to any emoji or icon */
+  margin-right: 0.5rem;
+  font-size: 1.2em;
+  vertical-align: middle;
+  filter: drop-shadow(0 0 5px #ff0033);
+}
+
+    .intro-container, .game-container {
+      text-align: center;
+      background: rgba(20, 20, 20, 0.95);
+      border: 2px solid #00ffee;
+      box-shadow: 0 0 20px #00ffee88;
+      border-radius: 15px;
+      padding: 2rem 3rem;
+      animation: pulse-glow 2s infinite alternate;
+      max-width: 700px;
+      width: 90%;
+      display: none;
+      position: relative;
+  z-index: 1;
+    }
+
+    .intro-container {
+      display: block;
+    }
+
+    .investigation-panel {
+      background: rgba(10, 10, 20, 0.95);
+      padding: 2rem;
+      border: 2px solid #00ffee;
+      border-radius: 15px;
+      box-shadow: 0 0 30px #00ffee66;
+    }
+
+    .start-button {
+      background: #00ffee;
+      color: #000;
+      padding: 0.8rem 1.5rem;
+      font-weight: bold;
+      font-size: 1rem;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 0 15px #00ffee99;
+      transition: transform 0.2s, box-shadow 0.3s;
+      margin-top: 1rem;
+    }
+
+    .start-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px #00ffeecc;
+    }
+
+    .terminal {
+      background-color: #000;
+      padding: 1rem;
+      margin-top: 1rem;
+      height: 200px;
+      overflow-y: auto;
+      border: 1px solid #00ffcc55;
+      border-radius: 8px;
+      text-align: left;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 1rem;
+    }
+
+    button {
+      background: #00ffcc;
+      border: none;
+      padding: 10px 20px;
+      font-weight: bold;
+      color: #000;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #00ffff;
+      transform: scale(1.05);
+    }
+
+    #feedback {
+      margin-top: 1rem;
+      font-size: 1.1rem;
+    }
+
+    #scoreBoard {
+      text-align: right;
+      margin-top: 0.5rem;
+      color: #ffffffcc;
+    }
+
+    .assistant {
+      display: flex;
+      align-items: center;
+      background: #00000088;
+      padding: 10px;
+      border: 1px solid #00ffcc;
+      margin-top: 10px;
+      border-radius: 8px;
+    }
+
+    .assistant img {
+      height: 50px;
+      margin-left: 10px;
+    }
+
+    #timer {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    @keyframes pulse-glow {
+      0% { box-shadow: 0 0 20px #00ffee66; }
+      50% { box-shadow: 0 0 30px #00ffeecc; }
+      100% { box-shadow: 0 0 20px #00ffee66; }
+    }
+    @keyframes flicker {
+  0%, 18%, 22%, 25%, 53%, 57%, 100% {
+    text-shadow: 0 0 8px #00fff7, 0 0 20px #00fff7;
+  }
+  20%, 24%, 55% {
+    text-shadow: none;
+  }
+}
+.title {
+  animation: flicker 1.5s infinite;
+}
+h2 {
+  animation: flicker 1.5s infinite;
+}
+
+
+  </style>
+</head>
+<body>
+<div class="background-layer"></div>
+  <!-- Intro Heading -->
+  <h1 class="main-heading" id="introHeading">Cyber Strike: Final Showdown</h1>
+
+  <!-- Game Heading -->
+  <h1 class="main-heading" id="gameHeading" style="display: none;"> Packet Analysis</h1>
+
+  <!-- Intro Screen -->
+  <div class="intro-container" id="introScreen">
+    <div class="investigation-panel">
+      <p>You’re a network analyst at a cybersecurity firm. A breach is suspected—your task is to investigate packet logs and isolate packets that contain suspicious patterns such as plaintext passwords, suspicious IPs, or malware signatures. The clock is ticking before the attacker exfiltrates more data!.</br><h2>Mission: Track, detect, and eliminate malicious packets. Time is running out—secure the network before it’s too late.</h2></p>
+      <button onclick="startInvestigation()" class="start-button">🚀 Begin Investigation</button>
+    </div>
+  </div>
+
+  <!-- Game UI -->
+  <div class="game-container" id="gameUI">
+    <div class="terminal" id="terminal">
+      <p class="intro">🚨 A breach is suspected! Inspect packets and isolate any that look malicious.</p>
+      <div id="packetDisplay"></div>
+    </div>
+    <div id="timer">Time: 60s</div>
+    <div class="assistant">
+      <div id="sanaDialog">Welcome Analyst. Let’s hunt some threats.</div>
+      <img src="assets/sana.png" alt="Sana" />
+    </div>
+    <div class="controls">
+      <button onclick="handleAnswer('yes')">🛑 Isolate</button>
+      <button onclick="handleAnswer('no')">✅ Safe</button>
+    </div>
+    <div id="feedback"></div>
+    <div id="scoreBoard">Score: 0/0</div>
+  </div>
+  <!-- Game Over Screen -->
+<div class="intro-container" id="gameOverScreen" style="display: none;">
+  <div class="investigation-panel">
+    <h2>🛑 TIME'S UP</h2>
+    <p id="finalStats"></p>
+    <p><strong>Objective:</strong> 
+Players analyze captured network packets to detect malicious activity, such as data exfiltration or malware communication. They must mark packets as 🛑 Isolate (threat) or ✅ Safe based on suspicious IPs, payload patterns, or anomalies.</br><h3>Learning Outcome:</h3></br>Understand how network sniffing and packet inspection work.
+
+    </br>Learn to identify obfuscated malware, suspicious IP addresses, and unusual traffic patterns.</br>
+
+Develop skills in network-level threat analysis.</p>
+    <button onclick="location.href='level-selection.html'">🏠Go to Home</button>
+  </div>
+</div>
+
+
+  <script>
+    const packetTemplates = [
+      { src: "192.168.1.2", dst: "8.8.8.8", payload: "GET /index.html" },
+      { src: "10.0.0.5", dst: "172.16.0.8", payload: "user=admin&pass=123456" },
+      { src: "203.0.113.42", dst: "192.168.1.10", payload: "malware_signature_XYZ" },
+      { src: "192.168.1.3", dst: "198.51.100.14", payload: "email=test@example.com" },
+      { src: "192.168.1.20", dst: "10.0.0.1", payload: "uname=admin; DROP TABLE users;" },
+      { src: "192.0.2.25", dst: "198.51.100.14", payload: "connection keep-alive" },
+      { src: "10.0.0.3", dst: "203.0.113.50", payload: "Authorization: password123" }
+    ];
+
+    const suspiciousIPs = ["203.0.113.42", "198.51.100.14"];
+    let currentPacket = null;
+    let score = 0;
+    let total = 0;
+    let timeLeft = 60;
+    let gameInterval = null;
+
+    function startInvestigation() {
+      document.getElementById("introScreen").style.display = "none";
+      document.getElementById("introHeading").style.display = "none";
+      document.getElementById("gameHeading").style.display = "block";
+      document.getElementById("gameUI").style.display = "block";
+      sanaSpeak("Investigation started. Let’s examine the traffic...");
+      startGame();
+    }
+
+    function randomPacket() {
+      return packetTemplates[Math.floor(Math.random() * packetTemplates.length)];
+    }
+
+    function isSuspicious(packet) {
+      const reasons = [];
+      if (/pass=|password[=:]/i.test(packet.payload)) reasons.push("Plaintext Password");
+      if (suspiciousIPs.includes(packet.src) || suspiciousIPs.includes(packet.dst)) reasons.push("Suspicious IP");
+      if (/malware_signature_/i.test(packet.payload)) reasons.push("Malware Signature");
+      if (/DROP TABLE|SELECT \* FROM|--/i.test(packet.payload)) reasons.push("SQL Injection");
+      return reasons;
+    }
+
+    function showPacket() {
+      currentPacket = randomPacket();
+      if (total > 10) packetTemplates.push({ src: "5.5.5.5", dst: "6.6.6.6", payload: "obfuscated_mal_ware" });
+      document.getElementById("packetDisplay").innerText = `
+🔍 Source: ${currentPacket.src}
+📡 Destination: ${currentPacket.dst}
+📄 Payload: "${currentPacket.payload}"
+      `;
+      document.getElementById("feedback").innerText = "";
+    }
+
+    function sanaSpeak(message) {
+      document.getElementById("sanaDialog").innerText = message;
+    }
+
+    function handleAnswer(answer) {
+      if (!currentPacket) return;
+
+      const reasons = isSuspicious(currentPacket);
+      total++;
+
+      let feedback = "";
+      if (answer === "yes") {
+        if (reasons.length > 0) {
+          score++;
+          feedback = `✅ Correct! Threats Detected: ${reasons.join(", ")}`;
+        } else {
+          feedback = `❌ Incorrect! This packet was clean.`;
+        }
+      } else {
+        if (reasons.length > 0) {
+          feedback = `❌ Missed Threat! Detected: ${reasons.join(", ")}`;
+        } else {
+          score++;
+          feedback = `✅ Correct! Packet was safe.`;
+        }
+      }
+
+      document.getElementById("feedback").innerText = feedback;
+      document.getElementById("scoreBoard").innerText = `Score: ${score}/${total}`;
+      showPacket();
+    }
+const sanaHints = [
+  "🧠 Tip: Look out for plaintext passwords like 'pass=' or 'password='.",
+  "⚠️ Watch for IPs like 203.0.113.42 – they’re marked suspicious.",
+  "🔍 If you see something like 'DROP TABLE', it might be a SQL injection!",
+  "🚫 Malware signatures often contain strange code like 'malware_signature_'.",
+  "🕵️‍♂️ Packets with login data are often targets for attackers.",
+  "💡 Not all packets are threats—some just look technical but are safe.",
+  "📊 High frequency to certain IPs might indicate C2 communication.",
+  "🔐 Real systems never send passwords unencrypted—if you see one, flag it!"
+];
+let hintInterval = null;
+
+function showHint() {
+  const hint = sanaHints[Math.floor(Math.random() * sanaHints.length)];
+  sanaSpeak(hint);
+}
+
+    function startGame() {
+      showPacket();
+      gameInterval = setInterval(() => {
+        timeLeft--;
+        document.getElementById("timer").innerText = `Time: ${timeLeft}s`;
+        if (timeLeft <= 0) {
+          clearInterval(gameInterval);
+          clearInterval(hintInterval);
+          endGame();
+        }
+      }, 1000);
+      // Sana gives tips every 10 seconds
+  hintInterval = setInterval(() => {
+    showHint();
+  }, 5000);
+    }
+
+   function endGame() {
+  clearInterval(gameInterval);
+  clearInterval(hintInterval); // stop hints
+  document.getElementById("gameUI").style.display = "none";
+  document.getElementById("gameHeading").style.display = "none";
+
+  const missed = total - score;
+  document.getElementById("finalStats").innerHTML = `
+    🔍 <strong>Packets Analyzed:</strong> ${total}<br>
+    🎯 <strong>Correct Actions:</strong> ${score}<br>
+    ⚠️ <strong>Missed or Incorrect:</strong> ${missed}
+  `;
+
+  document.getElementById("gameOverScreen").style.display = "block";
+}
+
+function goToHome() {
+  // Reset game state
+  timeLeft = 60;
+  score = 0;
+  total = 0;
+  document.getElementById("timer").innerText = "Time: 60s";
+  document.getElementById("scoreBoard").innerText = "Score: 0/0";
+  document.getElementById("feedback").innerText = "";
+  document.querySelector(".controls").style.display = "flex";
+
+  document.getElementById("gameOverScreen").style.display = "none";
+  document.getElementById("introScreen").style.display = "block";
+  document.getElementById("introHeading").style.display = "block";
+}
+
+  </script>
+
+</body>
+</html>

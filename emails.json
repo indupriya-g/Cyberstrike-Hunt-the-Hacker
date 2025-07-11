@@ -1,0 +1,27 @@
+[
+    {
+      "sender": "Bank Alert",
+      "subject": "Your Account Has Been Suspended!",
+      "body": "Click to verify: http://fake-bank.com",
+      "isPhishing": true
+    },
+    {
+      "sender": "Amazon",
+      "subject": "Order Confirmation #12345",
+      "body": "Your order has been placed.",
+      "isPhishing": false
+    },
+    {
+      "sender": "IT Support",
+      "subject": "URGENT: Reset Password",
+      "body": "Your password has expired. Click here: http://it-reset.me",
+      "isPhishing": true
+    },
+    {
+      "sender": "Library",
+      "subject": "Book Return Reminder",
+      "body": "Please return borrowed books by Friday.",
+      "isPhishing": false
+    }
+  ]
+  

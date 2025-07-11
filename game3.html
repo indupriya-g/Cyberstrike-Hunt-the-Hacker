@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cyber Strike: SQL Injection Level</title>
+  <style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Segoe UI', sans-serif;
+    overflow: hidden;
+    position: relative;
+    color: white;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-image: url('assets/3bg.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: blur(4px) brightness(1.1);
+    z-index: -1;
+  }
+
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .screen {
+    display: none;
+    width: 100%;
+    max-width: 700px;
+    text-align: center;
+    padding: 20px;
+    box-sizing: border-box;
+    height: 95vh;
+    overflow: hidden;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    position: relative;
+    z-index: 1;
+  }
+
+  .screen::-webkit-scrollbar {
+    display: none;
+  }
+
+  .visible {
+    display: block;
+  }
+
+  .box {
+    background: #1e1e2f;
+    padding: 20px;
+    margin: 20px auto;
+    border-radius: 12px;
+    box-shadow: 0 0 15px #00ffe0;
+    width: 90%;
+  }
+
+  h1 {
+    font-size: 2.5em;
+    color: #00ffe0;
+    text-align: center;
+    text-shadow: 0 0 5px #00ffe0, 0 0 15px #00ffee;
+    animation: glitch 1.5s infinite;
+  }
+
+  input, button {
+    width: 95%;
+    padding: 10px;
+    margin: 10px auto;
+    background: #2c2c3e;
+    color: white;
+    border: 1px solid #00ffe0;
+    border-radius: 5px;
+  }
+
+  button {
+    background-color: #00ffe0;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+  }
+
+  button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 10px #00ffe0, 0 0 20px #00ffe0;
+  }
+
+  .output {
+    margin-top: 15px;
+    background: #0d0d1a;
+    padding: 15px;
+    border-left: 4px solid #00ffe0;
+    border-radius: 10px;
+    word-break: break-word;
+  }
+
+  .success { color: #00ff88; }
+  .warning { color: #ffcc00; }
+  .danger  { color: #ff4d4d; }
+
+  .assistant button {
+    background-color: #3333ff;
+    color: white;
+  }
+
+  @keyframes glitch {
+    0% { text-shadow: 2px 0 red, -2px 0 blue; }
+    20% { text-shadow: -2px 0 red, 2px 0 blue; }
+    40% { text-shadow: 2px 2px red, -2px -2px blue; }
+    60% { text-shadow: -2px 2px red, 2px -2px blue; }
+    80% { text-shadow: 2px -2px red, -2px 2px blue; }
+    100% { text-shadow: 0 0 red, 0 0 blue; }
+  }
+</style>
+</head>
+<body>
+  <div id="loginScreen" class="screen visible">
+    <h1>🧪 SQL Injection Lab</h1>
+    <div class="box">
+      <h3>Login Simulation</h3>
+      <input type="text" id="username" placeholder="Username" />
+      <input type="password" id="password" placeholder="Password" />
+      <button onclick="attemptLogin()">Login</button>
+      <div id="feedback" class="output"></div>
+    </div>
+    <div class="box">
+      <h3>🔧 Fix-It Mode</h3>
+      <p>Click below to simulate secure login using parameterized queries.</p>
+      <button onclick="showFix()">Secure the Code</button>
+      <div id="fixOutput" class="output" style="display:none;"></div>
+    </div>
+    <div class="box assistant">
+      <h3>💡 Sana's Tips</h3>
+      <p>Need help? Click a hint!</p>
+      <button onclick="showHint(0)">🔍 Hint 1</button>
+      <button onclick="showHint(1)">🪤 Hint 2</button>
+      <button onclick="showHint(2)">🛡 Hint 3</button>
+      <div id="hintBox" class="output"></div>
+    </div>
+    <div class="box">
+      <button id="completeBtn" onclick="endMission(true)" disabled>✅ Complete Mission</button>
+      <button onclick="endMission(false)">❌ Fail Mission</button>
+    </div>
+  </div>
+
+  <div id="missionComplete" class="screen">
+    <h2 style="color:#00ff88; animation: pulse 1.5s infinite;">🎉 Mission Completed!</h2>
+    <div class="box">
+      <p class="success">✅ You've successfully patched the SQL Injection vulnerability!</p>
+      <p>System access is now protected using parameterized queries.</p>
+      <div style="margin-top: 15px;">
+        <span style="font-size: 1.3em; display: inline-block; background: #00ff88; color: #000; padding: 10px 15px; border-radius: 20px; box-shadow: 0 0 10px #00ff88;">
+          🏆 SQL Defender Badge Unlocked!
+        </span>
+      </div>
+      <button onclick="toggleObjective()">📋 Objective</button>
+      <div id="objectiveBox" class="output" style="display:none; text-align:left;">
+        <ul>
+          <li>✔ Simulated a SQL Injection login bypass</li>
+          <li>✔ Understood the structure of unsafe SQL queries</li>
+          <li>✔ Patched the vulnerability using secure coding (parameterized queries)</li>
+        </ul>
+      </div>
+      <button onclick="location.href='level-selection.html'">🏠Go to Home</button>
+    </div>
+  </div>
+
+  <div id="missionFailed" class="screen">
+    <h2 style="color:#ff4d4d; animation: glitch 1s infinite;">⚠️ Mission Incomplete</h2>
+    <div class="box">
+      <p class="danger">The system is still vulnerable to SQL Injection!</p>
+      <p>Here's what might have gone wrong:</p>
+      <ul style="text-align:left;">
+        <li>❌ You did not simulate a real SQL Injection (like `' OR '1'='1`).</li>
+        <li>❌ You didn't test bypassing login with malicious input.</li>
+        <li>❌ You may have skipped patching the query securely.</li>
+      </ul>
+    </div>
+    <div class="box assistant">
+      <h3>🧠 Sana's Advice</h3>
+      <p>Always test your code for vulnerabilities. SQL Injection happens when user inputs are not sanitized.</p>
+      <pre style="white-space: pre-wrap; font-size: 0.9em;">
+// Vulnerable
+"SELECT * FROM users WHERE username = '" + user + "'"
+
+// Safe (Parameterized)
+"SELECT * FROM users WHERE username = ?"
+      </pre>
+    </div>
+    <div class="box">
+      <button onclick="showScreen('loginScreen')">🔁 Try Again</button>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script>
+    let injectionPassed = false;
+    let injectionPatched = false;
+
+    const hints = [
+      "Try entering something like `' OR '1'='1` as the username. What might that do to the query?",
+      "SQL Injection works by injecting code that always returns true. Look at how the query is being formed.",
+      "To prevent SQL injection, never directly embed user input into SQL strings—use parameterized queries instead."
+    ];
+
+    function fireConfetti() {
+      confetti({
+        particleCount: 150,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ['#00ffe0', '#00ff88', '#ffffff']
+      });
+    }
+
+    function attemptLogin() {
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+      const query = `SELECT * FROM users WHERE username = '${username}' AND password = '${password}'`;
+
+      let feedbackHTML = `<p>Query:</p><code>${query}</code>`;
+      const completeBtn = document.getElementById("completeBtn");
+
+      if (username === "admin" && password === "admin123") {
+        feedback.innerHTML = `<p class="success">✅ Access granted. Welcome, Admin.</p>${feedbackHTML}`;
+        injectionPassed = false;
+        completeBtn.disabled = true;
+      } else if (username.includes("'") || password.includes("'")) {
+        if (username.includes("' OR '1'='1") || password.includes("' OR '1'='1")) {
+          feedback.innerHTML = `<p class="danger">⚠️ SQL Injection successful! Access bypassed.</p>${feedbackHTML}`;
+          injectionPassed = true;
+          completeBtn.disabled = false;
+        } else {
+          feedback.innerHTML = `<p class="warning">🧪 Suspicious input. Possible SQL behavior anomaly.</p>${feedbackHTML}`;
+          injectionPassed = false;
+          completeBtn.disabled = true;
+        }
+      } else {
+        feedback.innerHTML = `<p class="danger">❌ Login failed. Invalid credentials.</p>${feedbackHTML}`;
+        injectionPassed = false;
+        completeBtn.disabled = true;
+      }
+    }
+
+    function showFix() {
+      injectionPatched = true;
+      const fixOutput = document.getElementById("fixOutput");
+      fixOutput.style.display = 'block';
+      fixOutput.innerHTML = `
+        <p class="success">✅ Patched!</p>
+        <p>Use parameterized queries instead of directly embedding user input:</p>
+        <pre style="white-space: pre-wrap;">db.query("SELECT * FROM users WHERE username = ? AND password = ?", [username, password]);</pre>
+      `;
+    }
+
+    function showHint(index) {
+      document.getElementById("hintBox").innerHTML = `<p>${hints[index]}</p>`;
+    }
+
+    function showScreen(screenId) {
+      const screens = ['loginScreen', 'missionComplete', 'missionFailed'];
+      screens.forEach(id => document.getElementById(id).classList.remove('visible'));
+      document.getElementById(screenId).classList.add('visible');
+    }
+
+    function endMission(success) {
+      if (success) {
+        if (!injectionPassed) {
+          alert("⚠️ You must demonstrate SQL injection to complete the mission!");
+          return;
+        }
+        if (!injectionPatched) {
+          alert("⚠️ You must secure the code using parameterized queries before completing the mission!");
+          return;
+        }
+        fireConfetti();
+        const audio = new Audio('assets/success-chime.mp3');
+        audio.play();
+        showScreen('missionComplete');
+      } else {
+        showScreen('missionFailed');
+      }
+    }
+
+    function toggleObjective() {
+      const box = document.getElementById("objectiveBox");
+      box.style.display = box.style.display === "none" ? "block" : "none";
+    }
+  </script>
+</body>
+</html>

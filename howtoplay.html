@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How to Play - Cyber Strike</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Share Tech Mono', monospace;
+      background: black;
+      color: #00f2ff;
+      overflow-x: hidden;
+    }
+
+    video.bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: -2;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: -1;
+    }
+
+    .terminal {
+      max-width: 800px;
+      margin: 100px auto 30px;
+      padding: 30px;
+      background-color: #111827cc;
+      border-radius: 12px;
+      box-shadow: 0 0 15px #00f2ff;
+      position: relative;
+    }
+
+    .terminal h1 {
+      text-align: center;
+      font-size: 40px;
+      color: #00f0ff;
+      text-shadow: 0 0 10px #00f0ff, 0 0 20px #00f0ff, 0 0 40px #00f0ff;
+      font-weight: 900;
+      letter-spacing: 3px;
+      margin-bottom: 20px;
+    }
+
+    .tab-buttons {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+      gap: 10px;
+    }
+
+    .tab-btn {
+      background: none;
+      border: 2px solid #00f2ff;
+      color: #00f2ff;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .tab-btn:hover, .tab-btn.active {
+      background-color: #00f2ff;
+      color: #0f0f3a;
+    }
+
+    .output {
+      min-height: 200px;
+      white-space: pre-line;
+      line-height: 1.6;
+      font-size: 1rem;
+      color: #e0f7fa;
+    }
+
+    .back-btn {
+      margin-top: 30px;
+      display: block;
+      background-color: transparent;
+      border: 2px solid #00f2ff;
+      color: #00f2ff;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .back-btn:hover {
+      background-color: #00f2ff;
+      color: #0f0f3a;
+    }
+
+    .sana-character {
+      position: fixed;
+      bottom: 40px;
+      right: 40px;
+      width: 300px;
+      animation: float 4s ease-in-out infinite;
+      z-index: 2;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+  </style>
+</head>
+<body>
+  <video class="bg-video" autoplay muted loop>
+    <source src="assets/Green Futuristic Tech Cyber Security Video.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+  <div class="overlay"></div>
+
+  <div class="terminal">
+    <h1>HOW TO PLAY - CYBER STRIKE</h1>
+    <div class="tab-buttons">
+      <button class="tab-btn active" onclick="showLevel(1)">Level 1</button>
+      <button class="tab-btn" onclick="showLevel(2)">Level 2</button>
+      <button class="tab-btn" onclick="showLevel(3)">Level 3</button>
+      <button class="tab-btn" onclick="showLevel(4)">Level 4</button>
+    </div>
+    <div class="output" id="output"></div>
+    <button class="back-btn" onclick="history.back()"> Back</button>
+  </div>
+
+  <img class="sana-character" src="assets/how to play.png" alt="Floating Sana Character" />
+
+  <audio id="typeSound" src="type.mp3" preload="auto"></audio>
+  <audio id="voiceover" preload="auto"></audio>
+
+  <script>
+    const levels = {
+      1: ` Level 1: CyberMail Defense (Phishing Detection)
+
+- Read the email preview shown on the right.
+- Check sender details, links, and content for red flags.
+- Click either “Phishing” or “Safe” based on your judgment.
+- Score points for correct identification and move to the next email.`,
+
+      2: ` Level 2: Ransom Raid (Ransomware Detection)
+
+- Monitor file activity logs or folder content changes.
+- Watch for suspicious patterns like rapid file renaming/encryption.
+- When ransomware activity is suspected, click the “Block” button.
+- Prevent the ransomware in time to save your system!`,
+
+      3: ` Level 3: Code Breach (SQL Injection)
+
+- Review user input fields and backend SQL queries.
+- Spot malicious input patterns like ' OR 1=1 --.
+- Click “Sanitize” to clean the input or “Reject” to block it.
+- Prevent the hacker from breaching your database.`,
+
+      4: ` Level 4: Packet Probe (Packet Analysis)
+
+- Examine simulated network packets (IP, ports, payload info).
+- Look for signs of port scans, data leaks, or unknown protocols.
+- Click “Safe” or “Suspicious” based on your analysis.
+- Gain points for identifying threats accurately.`
+    };
+
+    let typingInterval;
+
+    function showLevel(num) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-btn')[num - 1].classList.add('active');
+      const output = document.getElementById('output');
+      clearInterval(typingInterval);
+      output.textContent = '';
+      typeText(levels[num], output);
+      playVoice(`voiceover${num}.mp3`);
+    }
+
+    function typeText(text, element, speed = 30) {
+      let index = 0;
+      const typeSound = document.getElementById('typeSound');
+      typingInterval = setInterval(() => {
+        element.textContent += text[index];
+        typeSound.currentTime = 0;
+        typeSound.play();
+        index++;
+        if (index >= text.length) clearInterval(typingInterval);
+      }, speed);
+    }
+
+    function playVoice(filename) {
+      const voice = document.getElementById('voiceover');
+      voice.src = filename;
+      voice.play();
+    }
+
+    window.onload = () => {
+      typeText(levels[1], document.getElementById('output'));
+      playVoice('voiceover1.mp3');
+    };
+  </script>
+</body>
+</html>

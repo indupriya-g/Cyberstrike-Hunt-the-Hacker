@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Injection Detour - Start Mission</title>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .title {
+      color: #00ffe0;
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin-bottom: 20px;
+      text-shadow: 0 0 15px #00ffe0aa;
+    }
+
+    .container {
+      background: #1e1e2f;
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 0 25px #00ffe0, 0 0 10px #00ffe044;
+      max-width: 600px;
+      width: 90%;
+      text-align: center;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    h3 {
+      margin-top: 15px;
+      margin-bottom: 8px;
+      color: #ffdb70;
+    }
+
+    p {
+      margin-bottom: 10px;
+      color: #ddd;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 12px 24px;
+      background-color: #00ffe0;
+      color: black;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #00ccbb;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .character-box {
+      position: fixed;
+      bottom: 80px;
+      right: 50px;
+      display: flex;
+      align-items: flex-start;
+      z-index: 1000;
+    }
+
+    .character-box img {
+      height: 280px;
+    }
+
+    .speech-bubble {
+      background: #fff;
+      color: #000;
+      padding: 15px 20px;
+      border-radius: 15px;
+      margin-left: -20px;
+      box-shadow: 0 0 10px #00ffe0;
+      font-weight: bold;
+      max-width: 240px;
+      animation: floatText 3s ease-in-out infinite;
+    }
+
+    @keyframes floatText {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+      100% { transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Title outside the container -->
+  <div class="title">🛡️ Injection Detour</div>
+
+  <!-- Main mission content -->
+  <div class="container">
+    <h3>🎯 Level Objective:</h3>
+    <p>Teach players how SQL injection attacks work and how to recognize or prevent them.</p>
+    <h3>📖 Scenario :</h3>
+    <p>
+      You’re an ethical hacker testing your company’s login portal. It looks basic,
+      but you suspect it’s vulnerable to SQL injection. <h3></br>MISSION: Analyze the input fields,
+      inject test strings, and gain admin access—or secure the backend by fixing the code.</h3>
+    </p>
+    <button onclick="location.href='game3.html'">🚀 Start the Mission</button>
+  </div>
+
+  <!-- Character with speech bubble -->
+  <div class="character-box">
+    <img src="assets/sana3.png" alt="Guide Character">
+    <div class="speech-bubble">💬 It’s time to test your ability on SQL!</div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Cyber Strike</title>
+  <style>
+    /* Reset and base */
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      overflow: hidden;
+      color: white;
+    }
+
+    /* Background video styling */
+    #bg-video {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+      filter: brightness(0.4) saturate(1.5) contrast(1.2) hue-rotate(90deg);
+      /* hue-rotate(90deg) to get greenish tint */
+    }
+
+    /* Container for content and image */
+    .container {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    /* About box */
+    .about-box {
+      background-color: rgba(28, 34, 53, 0.85);
+      border-radius: 15px;
+      box-shadow: 0 0 25px #00f2ff;
+      padding: 30px 40px;
+      max-width: 600px;
+      text-align: left;
+      color: white;
+      flex: 1 1 auto;
+      margin-right: 30px;
+    }
+
+    .about-box h1 {
+      font-size: 1.8rem;
+      color: #00f2ff;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .about-box h2 {
+      font-size: 1.2rem;
+      color: #ffcccc;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .about-box p {
+      text-align: justify;
+      line-height: 1.6;
+      margin-bottom: 10px;
+    }
+
+    .about-box ul {
+      padding-left: 20px;
+      margin-bottom: 20px;
+    }
+
+    .about-box ul li {
+      margin-bottom: 8px;
+    }
+
+    .back-btn {
+      background-color: #0f0f3a;
+      border: 1px solid #00f2ff;
+      padding: 10px 20px;
+      border-radius: 8px;
+      color: #00f2ff;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .back-btn:hover {
+      background-color: #00f2ff;
+      color: #0f0f3a;
+    }
+
+    /* Image on right */
+    .side-image {
+      max-width: 350px;
+      max-height: 450px;
+      border-radius: 15px;
+    
+      flex-shrink: 0;
+      object-fit: contain;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .container {
+        flex-direction: column;
+      }
+
+      .about-box {
+        margin-right: 0;
+        margin-bottom: 20px;
+        max-width: 90%;
+      }
+
+      .side-image {
+        max-width: 80vw;
+        max-height: 300px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Background video -->
+  <video id="bg-video" autoplay muted loop playsinline>
+    <source src="assets/Green Futuristic Tech Cyber Security Video.mp4" type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
+
+  <div class="container">
+    <div class="about-box">
+      <h1 class="title">CYBER STRIKE</h1>
+      <h2 class="subtitle">HUNT THE HACKER</h2>
+      <p>
+        CYBER STRIK: HUNT THE HACKER is an interactive browser-based cybersecurity game designed to build awareness and skills in recognizing and defending against common cyber threats. Players progress through four immersive levels, each simulating a real-world cyberattack scenario.
+      </p>
+      <ul>
+        <li><strong>Level 1: CyberMail Defense</strong> – Identify phishing emails by analyzing suspicious senders, links, and content.</li>
+        <li><strong>Level 2: Ransom Raid</strong> – Detect ransomware through file behavior and stop the attack in time.</li>
+        <li><strong>Level 3: Code Breach</strong> – Prevent SQL injection attacks by validating inputs and queries.</li>
+        <li><strong>Level 4: Packet Probe</strong> – Analyze network packets to find anomalies and intrusions.</li>
+      </ul>
+      <p><strong>Goal:</strong> Empower users with hands-on experience to detect threats, make quick decisions, and build critical thinking in a gamified environment.</p>
+
+      <button class="back-btn" onclick="history.back()">Back</button>
+    </div>
+
+    <!-- Right side image -->
+    <img src="assets/about.png" alt="Neon Cyber Security Visual" class="side-image" />
+  </div>
+</body>
+</html>

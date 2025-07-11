@@ -1,0 +1,260 @@
+.splash-screen {
+  margin: 0;
+  padding: 0;
+  background-color: #000814;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.splash-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 2s ease-in-out, scaleIn 5s ease-in-out;
+}
+
+.logo-glow {
+  width: 80%;
+  max-width: 700px;
+  filter: drop-shadow(0 0 25px #00f0ff);
+  animation: pulse 2s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0% { filter: drop-shadow(0 0 10px #00f0ff); }
+  50% { filter: drop-shadow(0 0 25px #00f0ff); }
+  100% { filter: drop-shadow(0 0 10px #00f0ff); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  0% { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+@font-face {
+  font-family: 'Stereofidelic';
+  src: url('fonts/Stereofidelic.ttf') format('truetype');
+}
+/* Full-screen video background */
+.video-background {
+  position: fixed; /* Keep it fixed while scrolling */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden; /* Hide any part of the video that goes outside the screen */
+  z-index: -1; /* Send video behind other content */
+}
+
+#background-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensure the video covers the screen */
+}
+
+/* Center login form */
+.login-form-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  padding: 20px;
+  border-radius: 10px;
+  color: white;
+}
+
+h2 {
+  text-align: center;
+}
+
+/* Dashboard content */
+.dashboard-container {
+  position: relative;
+  padding: 20px;
+  text-align: center;
+  color: white;
+  z-index: 1; /* Ensure content is in front of the video */
+}
+
+body {
+  font-family: 'Stereofidelic', sans-serif;
+}
+
+.login-page {
+  background-color: #000814;
+  color: #00f0ff;
+  font-family: 'Arial Black', Gadget, sans-serif;
+  text-align: center;
+  padding-top: 60px;
+}
+
+.login-container {
+  width: 400px;
+  margin: auto;
+  background-color: #011627;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 0 20px #00f0ff;
+}
+
+.login-container h1, .login-container h3 {
+  text-shadow: 0 0 8px #00f0ff;
+}
+
+input[type="text"], input[type="password"] {
+  width: 90%;
+  padding: 12px;
+  margin: 10px 0;
+  border: 2px solid #00f0ff;
+  background-color: #000;
+  color: #00f0ff;
+  font-size: 16px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px #00f0ff inset;
+}
+
+input::placeholder {
+  color: #00cfff;
+}
+.login-page {
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #000;
+  color: #fff;
+  overflow: hidden;
+}
+
+.video-background {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  min-width: 100%; 
+  min-height: 100%;
+  z-index: -1;
+  filter: brightness(0.4);
+}
+
+.login-container {
+  max-width: 400px;
+  margin: 100px auto;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 0 20px #00ffcc;
+  text-align: center;
+}
+
+.styled-input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 0 10px #00ffcc;
+  background-color: black;
+  color: white;
+  font-size: 16px;
+}
+
+.neon-button {
+  background: none;
+  border: 2px solid #00ffcc;
+  padding: 10px 20px;
+  border-radius: 10px;
+  color: #00ffcc;
+  font-size: 18px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.neon-button:hover {
+  background: #00ffcc;
+  color: black;
+  box-shadow: 0 0 20px #00ffcc;
+}
+
+.neon-button.alt {
+  margin-top: 10px;
+}
+
+
+
+
+.neon-button {
+  background-color: transparent;
+  border: 2px solid #00f0ff;
+  color: #00f0ff;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 12px 30px;
+  margin: 15px 0;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 0 15px #00f0ff;
+  transition: 0.3s ease;
+}
+
+/* Match both email and password styles */
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 10px 15px;
+  margin-bottom: 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  color: #00ffff;
+  background-color: transparent;
+  box-shadow: 0 0 10px #00ffff;
+  outline: none;
+  transition: 0.3s ease-in-out;
+}
+
+input[type="email"]::placeholder,
+input[type="password"]::placeholder {
+  color: #00ffff99;
+}
+
+input[type="email"]:focus,
+input[type="password"]:focus {
+  box-shadow: 0 0 15px #00ffff, 0 0 25px #00ffff;
+}
+
+/* Optional: center alignment & layout consistency */
+.login-container {
+  width: 420px;
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 15px;
+  padding: 40px;
+  text-align: center;
+  box-shadow: 0 0 20px #00ffff;
+}
+
+.neon-button {
+  background: transparent;
+  color: #00ffff;
+  border: 2px solid #00ffff;
+  padding: 10px 20px;
+  margin: 10px;
+  border-radius: 10px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: 0.2s;
+  box-shadow: 0 0 10px #00ffff;
+}
+
+.neon-button:hover {
+  background-color: #00ffff;
+  color: #000;
+  box-shadow: 0 0 20px #00ffff;
+}

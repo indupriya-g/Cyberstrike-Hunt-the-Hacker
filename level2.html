@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ransom Raid - Level 2</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
+  <style>
+    html, body {
+      margin: 0; padding: 0;
+      font-family: 'Orbitron', sans-serif;
+      color: #00ffcc;
+      text-shadow: 0 0 5px #00ffcc;
+      overflow-x: hidden;
+    }
+    #start-screen, #game-over-screen {
+      position: absolute; top: 0; left: 0;
+      width: 100%; height: 100vh;
+      background: radial-gradient(circle at center, #000000 30%, #101010 100%);
+      display: flex; justify-content: center; align-items: center;
+      z-index: 5; color: #00ffcc; text-align: center; padding: 20px;
+      box-sizing: border-box;
+    }
+    #game-over-screen {
+      display: none;
+      flex-direction: column;
+    }
+    .intro-wrapper {
+      display: flex; flex-direction: row; align-items: center; gap: 30px;
+      max-width: 1000px;
+    }
+    #avatar { width: 300px; max-width: 35vw; }
+    .intro-text { text-align: left; font-size: 1.1rem; }
+    #start-screen h1 {
+      color: #ff3c3c;
+      text-shadow: 0 0 10px #ff3c3c;
+      margin-bottom: 20px; font-size: 2rem;
+    }
+    #start-screen button {
+      margin-top: 20px; padding: 12px 24px;
+      background: #00ffcc; border: none; color: #000;
+      font-weight: bold; border-radius: 6px; font-size: 1rem;
+      cursor: pointer;
+    }
+    #bg-video {
+      position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%;
+      object-fit: cover; z-index: -1;
+      filter: brightness(0.3) blur(2px);
+      pointer-events: none;
+    }
+    #game-container {
+      display: none;
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: flex-start;
+      padding: 40px 20px;
+      box-sizing: border-box;
+      z-index: 1; text-align: center;
+    }
+    h1.glitch {
+      color: #ff3c3c;
+      font-size: 2.5rem;
+      text-shadow: 0 0 5px #ff3c3c, 0 0 10px #ff3c3c;
+      margin-bottom: 20px;
+    }
+    .score-timer {
+      display: flex; justify-content: center;
+      align-items: center; gap: 40px;
+      font-size: 1.2rem; margin-bottom: 30px;
+    }
+    .file-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 20px;
+      width: 100%; max-width: 800px;
+      margin: 0 auto; padding: 20px 0;
+    }
+    .file {
+      border: 2px solid #00ff88;
+      border-radius: 10px;
+      padding: 15px;
+      text-align: center;
+      cursor: pointer;
+      background-color: #1a1a1a;
+      box-shadow: 0 0 10px #00ff88;
+      font-weight: bold;
+      transition: transform 0.25s ease, background-color 0.3s;
+    }
+    .file:hover { transform: scale(1.05); background-color: #222; }
+    .file.selected { border-color: #ff3c3c; box-shadow: 0 0 15px #ff3c3c; }
+    .file.unlocked { border-color: #00ffcc; box-shadow: 0 0 15px #00ffcc; background-color: #111; }
+    .input-area {
+      margin-top: 50px;
+      display: flex; flex-direction: column; align-items: center;
+    }
+    input[type="text"] {
+      padding: 12px; width: 300px;
+      border-radius: 5px; border: 1px solid #00ffcc;
+      background: #101010; color: #00ffcc;
+      font-size: 16px; margin-bottom: 10px;
+      box-shadow: 0 0 8px #00ffc3;
+    }
+    button {
+      padding: 10px 24px; border: none;
+      border-radius: 5px; background: #00ffcc;
+      color: #000; font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 0 10px #00ffcc;
+      margin-top: 20px;
+    }
+    .preview-text {
+      margin-top: 20px; font-size: 1rem;
+      color: #c2f9ff; text-shadow: 0 0 5px #00ffff;
+      font-family: 'Courier New', monospace;
+      white-space: pre-line;
+    }
+    .preview-text#hint {
+  color: hsl(0, 0%, 100%);
+  font-size: 1.2rem;
+  font-style: italic;
+}
+
+    @media (max-width: 600px) {
+      .score-timer { flex-direction: column; gap: 10px; }
+      input[type="text"] { width: 90%; }
+    }
+
+    /* OBJECTIVE MODAL */
+    #objective-modal {
+      display: none;
+      position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 10;
+      justify-content: center;
+      align-items: center;
+      color: #00ffcc;
+    }
+    .modal-content {
+      background: #111;
+      padding: 30px;
+      border-radius: 10px;
+      max-width: 600px;
+      text-align: left;
+      box-shadow: 0 0 20px #00ffcc;
+    }
+    .modal-content h2, .modal-content h3 {
+      color: #ff3c3c;
+      text-shadow: 0 0 5px #ff3c3c;
+    }
+    .modal-content ul {
+      list-style-type: disc;
+      padding-left: 20px;
+    }
+  </style>
+</head>
+<body>
+  <video autoplay muted loop id="bg-video">
+    <source src="assets/level2bg.mp4" type="video/mp4" />
+  </video>
+
+  <!-- START SCREEN -->
+  <div id="start-screen">
+    <div class="intro-wrapper">
+      <div class="speech-bubble" id="speechText"></div>
+      <img src="assets/sana2.png" alt="Cyber Assistant" id="avatar">
+      <div class="intro-text">
+        <h1 class="header">Level 2: Ransomware Alert!!!</h1>
+        <p><strong>Scenario:</strong> You're a cybersecurity analyst responding to a ransomware attack. Multiple files are locked.</p>
+        <p><strong>Mission:</strong> Recover data using hidden decryption keys. Avoid paying the ransom!</p>
+        <button onclick="startGame()">Start Mission</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- GAME -->
+  <div id="game-container">
+    <h1 class="glitch" data-text="RANSOMWARE ALERT!">RANSOMWARE ALERT!</h1>
+    <div class="score-timer">
+      <div id="score">Score: 0</div>
+      <div id="timer">Time: 120s</div>
+    </div>
+    <div class="file-grid">
+      <div class="file" onclick="selectFile('notes.txt')">notes.txt</div>
+      <div class="file" onclick="selectFile('finance data.csv')">finance data.csv</div>
+      <div class="file" onclick="selectFile('photo backup.jpg')">photo backup.jpg</div>
+      <div class="file" onclick="selectFile('clue.txt')">clue.txt</div>
+    </div>
+    <div class="input-area">
+      <input type="text" id="keyInput" placeholder="Enter decryption key...">
+      <button onclick="unlockFile()">UNLOCK</button>
+      <div class="preview-text" id="preview"></div>
+      <div class="preview-text" id="hint"></div>
+<div class="preview-text" id="preview"></div>
+
+    </div>
+  </div>
+  
+
+  <!-- GAME OVER SCREEN -->
+  <div id="game-over-screen">
+    <h1 class="glitch" data-text="MISSION COMPLETE">MISSION COMPLETE</h1>
+    <p style="font-size: 1.2rem; color: #00ffcc;">Great job! All ransomware threats were neutralized.</p>
+    <p style="font-size: 1.5rem;">Final Score: <span id="final-score"></span></p>
+    <div style="margin-top: 20px;">
+      <button onclick="location.href='level-selection.html'">🏠Go to Home</button>
+      <button onclick="showObjective()">🎯Objective</button>
+      <button onclick="location.reload()">🎮Play Again</button>
+    </div>
+  </div>
+
+  <!-- OBJECTIVE MODAL -->
+  <div id="objective-modal">
+    <div class="modal-content">
+      <h2>🎯 Objective</h2>
+      <p>Teach players how ransomware spreads, how to recognize suspicious behaviors or file changes, and how to respond quickly to contain the damage and secure the system.</p>
+      <h3>📚 Learning Goals:</h3>
+      <ul>
+        <li>Understand how ransomware encrypts files and demands payment.</li>
+        <li>Recognize indicators of ransomware in progress (e.g., sudden file renames, ransom notes).</li>
+        <li>Apply safe practices like isolating infected machines and backing up data.</li>
+        <li>Practice decision-making to minimize impact during an attack.</li>
+      </ul>
+      <button onclick="hideObjective()">Close</button>
+    </div>
+  </div>
+
+  <script>
+    let selectedFile = "";
+    let score = 0;
+    let timeLeft = 120;
+    let timerInterval;
+    const unlockedFiles = new Set();
+
+    const correctKeys = {
+      "notes.txt": "unlock123",
+      "finance data.csv": "dataSafe",
+      "photo backup.jpg": "memories2024",
+      "clue.txt": "unlockme"
+    };
+
+   const fileContents = {
+  "notes.txt": 
+    "Meeting Notes:\n" +
+    "- Backup breached.\n" +
+    "- Check 'clue.txt' for hints.\n" +
+    "- Finance sheet anomaly may reveal the lock.\n" +
+    "- Avoid paying ransom.",
+
+  "finance data.csv": 
+    "Account,Amount\n" +
+    "Operations, ₹1,00,000\n" +
+    "Marketing, ₹50,000\n" +
+    "IT, ₹50,000\n" +
+    "Note: Duplicate anomaly spotted. Ref ID: 042",
+
+  "photo backup.jpg": 
+    "📸 Restored family trip memories (2021).\n" +
+    "No corruption detected in image clusters.",
+
+  "clue.txt": 
+    "Decryption Key: unlockme\n" +
+    "Cross-reference with 'finance data.csv'.\n" +
+    "The number you're looking for is tied to the anomaly."
+};
+
+  const fileHints = {
+  "notes.txt": "🔒 Hint: It's something you might type when trying to open a digital door… and it ends with something easy to remember! ",
+  "finance data.csv": "🧩 Hint: It protects your information like a vault—think security for your digital files!",
+  "photo backup.jpg": "🖼️ Hint: Think of precious moments and the current year—they go together in this password!",
+  "clue.txt": "🔑 Hint: This one’s practically begging you to open it—what does it want you to do?"
+};
+
+    function startGame() {
+      document.getElementById("start-screen").style.display = "none";
+      document.getElementById("game-container").style.display = "block";
+      startTimer();
+    }
+
+    function selectFile(fileName) {
+  selectedFile = fileName;
+  document.querySelectorAll(".file").forEach(f => f.classList.remove("selected"));
+  const selected = Array.from(document.querySelectorAll(".file")).find(f => f.textContent === fileName);
+  if (selected) selected.classList.add("selected");
+  document.getElementById("preview").textContent = `Selected: ${fileName}`;
+  document.getElementById("hint").textContent = fileHints[fileName] || '';
+}
+
+
+    function unlockFile() {
+      const input = document.getElementById("keyInput").value.trim();
+      if (!selectedFile) return alert("Please select a file first.");
+      if (input === correctKeys[selectedFile]) {
+        score += 10;
+        updateScore();
+        unlockedFiles.add(selectedFile);
+        const fileDiv = Array.from(document.querySelectorAll(".file")).find(f => f.textContent === selectedFile);
+        if (fileDiv) {
+          fileDiv.classList.remove("selected");
+          fileDiv.classList.add("unlocked");
+        }
+        document.getElementById("preview").textContent = fileContents[selectedFile];
+
+        if (unlockedFiles.size === Object.keys(correctKeys).length) {
+          clearInterval(timerInterval);
+          document.getElementById("preview").textContent += "\n🎉 All critical files successfully recovered!";
+          document.getElementById("game-container").style.display = "none";
+          document.getElementById("game-over-screen").style.display = "flex";
+          document.getElementById("final-score").textContent = score;
+        }
+      } else {
+        document.getElementById("preview").textContent = "❌ Incorrect key.";
+      }
+    }
+
+    function updateScore() {
+      document.getElementById("score").textContent = "Score: " + score;
+    }
+
+    function startTimer() {
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        document.getElementById("timer").textContent = "Time: " + timeLeft + "s";
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          document.getElementById("game-container").style.display = "none";
+          document.getElementById("game-over-screen").style.display = "flex";
+          document.getElementById("final-score").textContent = score;
+        }
+      }, 1000);
+    }
+
+    function showObjective() {
+      document.getElementById("objective-modal").style.display = "flex";
+    }
+
+    function hideObjective() {
+      document.getElementById("objective-modal").style.display = "none";
+    }
+
+    function typeSpeech(text, elementId, speed = 35) {
+      const el = document.getElementById(elementId);
+      let i = 0;
+      el.textContent = '';
+      function type() {
+        if (i < text.length) {
+          el.textContent += text.charAt(i++);
+          setTimeout(type, speed);
+        }
+      }
+      type();
+    }
+
+    window.onload = function () {
+      typeSpeech("Success! Mission 1 cleared. 🎯 Time to level up — Mission 2 begins now. Let’s outwit the code and crush the ransomware! 🔓🚀", "speechText");
+    };
+  </script>
+</body>
+</html>

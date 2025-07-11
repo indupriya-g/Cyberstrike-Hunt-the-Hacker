@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login - Cyber Strike</title>
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+
+  <!-- Firebase config -->
+  <script src="firebase-config.js"></script>
+  <script defer src="js/auth.js"></script>
+</head>
+<body class="login-page">
+  <audio id="click-sound" src="assets/button-click.mp3" preload="auto"></audio>
+
+  <div class="video-background">
+    <video autoplay muted loop id="background-video">
+      <source src="assets/Green Futuristic Tech Cyber Security Video.mp4" type="video/mp4" />
+    </video>
+  </div>
+
+  <div class="login-container">
+    <h1>Cyber Strike</h1>
+    <h3>Hunt the Hacker</h3>
+
+    <form id="login-form">
+      <input type="email" id="email" placeholder="Enter valid Gmail" pattern=".+@gmail\.com" required />
+      <input type="password" id="password" placeholder="Password" required />
+      
+      <button type="button" id="login-button" class="neon-button">Login</button>
+      <button type="button" id="register-button" class="neon-button">Register</button>
+
+      <p><a href="#" id="reset-password" style="color: #00ffff">Forgot Password?</a></p>
+    </form>
+
+    <div id="error-message" style="color: red; margin-top: 10px;"></div>
+  </div>
+
+  <script>
+    // Play click sound
+    const clickSound = document.getElementById("click-sound");
+    function playClickSound() {
+      clickSound.currentTime = 0;
+      clickSound.play();
+    }
+
+    document.getElementById("login-button").addEventListener("click", async () => {
+      playClickSound();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+
+      try {
+        await firebase.auth().signInWithEmailAndPassword(email, password);
+      
+        window.location.href = "dashboard.html"; 
+        // redirect to game
+      } catch (error) {
+        document.getElementById("error-message").textContent = "Invalid email or password.";
+      }
+    });
+       function isStrongPassword(password) {
+      return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/.test(password);
+    }
+
+
+    document.getElementById("register-button").addEventListener("click", async () => {
+      playClickSound();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+
+      try {
+        await firebase.auth().createUserWithEmailAndPassword(email, password);
+        alert("Registration successful! You can now log in.");
+        window.location.href = "dashboard.html"; // or correct path
+
+      } catch (error) {
+        document.getElementById("error-message").textContent = error.message;
+      }
+    });
+
+    document.getElementById("reset-password").addEventListener("click", async () => {
+      playClickSound();
+      const email = document.getElementById("email").value.trim();
+
+      if (!email) {
+        alert("Please enter your Gmail to reset your password.");
+        return;
+      }
+
+      try {
+        await firebase.auth().sendPasswordResetEmail(email);
+        alert("Password reset email sent! Check your inbox.");
+      } catch (error) {
+        document.getElementById("error-message").textContent = error.message;
+      }
+    });
+  
+
+
+  </script>
+</body>
+</html>
